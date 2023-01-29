@@ -13,8 +13,6 @@ export const getTicketsTypes = async () => {
 export const getTicket = async (userId: number) => {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
 
-    if (!enrollment) throw notFoundError();
-
     const ticketInfo = await findTickects(enrollment.id);
 
     if (!ticketInfo) throw notFoundError();
@@ -38,4 +36,8 @@ export const getTicket = async (userId: number) => {
         createdAt: ticketInfo.createdAt,
         updatedAt: ticketInfo.updatedAt,
     }
+};
+
+export const createTicket = async (ticketTypeId: number, userId: number) => {
+    console.log("criou");
 };

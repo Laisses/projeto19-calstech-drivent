@@ -1,7 +1,7 @@
-import { getTicketsTypes, getTicket } from "@/services";
+import { getTicketsTypes, getTicket, createTicket } from "@/services";
 import { AuthenticatedRequest } from "@/middlewares";
 import httpStatus from "http-status";
-import { Response, Request } from "express";
+import { Response } from "express";
 
 export const getTicketsByTypes = async (_req: AuthenticatedRequest, res: Response) => {
     try {
@@ -23,6 +23,10 @@ export const getTicketByCustomer = async (req: AuthenticatedRequest, res: Respon
     }
 };
 
-export const createNewTicket = async (req: Request, res: Response) => {
+export const createNewTicket = async (req: AuthenticatedRequest, res: Response) => {
+    //const { userId } = req;
+    const userId = 41;
     const { ticketTypeId } = req.body;
+
+    await createTicket(ticketTypeId, userId);
 }
