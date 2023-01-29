@@ -33,5 +33,6 @@ export const createNewTicket = async (req: AuthenticatedRequest, res: Response) 
         return res.status(httpStatus.CREATED).send(ticket);
     } catch (error) {
         console.log(error);
+        return res.sendStatus(httpStatus.BAD_REQUEST);
     }
-}
+};

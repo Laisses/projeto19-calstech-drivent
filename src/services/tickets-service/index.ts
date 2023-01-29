@@ -13,7 +13,7 @@ export const getTicketsTypes = async () => {
 };
 
 export const getTicket = async (userId: number): Promise<CompleteTicket> => {
-    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
 
     const ticketInfo = await findTickects(enrollment.id);
 
