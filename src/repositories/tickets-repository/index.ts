@@ -13,10 +13,10 @@ export const findTickectByType = async (id: number) => {
     })
 };
 
-export const findTickects = async (id: number) => {
-    return prisma.ticket.findUnique({
+export const findTickects = async (enrollmentId: number) => {
+    return prisma.ticket.findFirst({
         where: {
-            id
+            enrollmentId
         }
     });
 };

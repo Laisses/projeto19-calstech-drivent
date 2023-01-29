@@ -19,7 +19,7 @@ export const getTicket = async (userId: number): Promise<CompleteTicket> => {
 
     if (!ticketInfo) throw notFoundError();
 
-    const ticketType = await findTickectByType(ticketInfo.id);
+    const ticketType = await findTickectByType(ticketInfo.ticketTypeId);
 
     return {
         id: ticketInfo.id,
@@ -33,7 +33,7 @@ export const getTicket = async (userId: number): Promise<CompleteTicket> => {
 };
 
 export const createTicket = async (ticketTypeId: number, userId: number) => {
-    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
 
     const ticket = {
         status: TicketStatus.RESERVED,
