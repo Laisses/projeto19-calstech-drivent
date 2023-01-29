@@ -5,44 +5,48 @@ import { CompleteTicket } from "@/protocols";
 import { TicketStatus } from "@prisma/client";
 
 export const getTicketsTypes = async () => {
-    const tickets = await findTickectTypes();
+  const tickets = await findTickectTypes();
 
-    if (tickets) {
-        return tickets;
-    }
+  if (tickets) {
+    return tickets;
+  }
 };
 
 export const getTicket = async (userId: number): Promise<CompleteTicket> => {
-    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
+  const enrollment = await enrollmentRepository.findUserEnrollment(userId);
 
-    const ticketInfo = await findTickects(enrollment.id);
+  if (!enrollment) throw notFoundError();
 
-    if (!ticketInfo) throw notFoundError();
+  const ticketInfo = await findTickects(enrollment.id);
 
-    const ticketType = await findTickectByType(ticketInfo.ticketTypeId);
+  if (!ticketInfo) throw notFoundError();
 
-    return {
-        id: ticketInfo.id,
-        status: ticketInfo.status,
-        ticketTypeId: ticketInfo.ticketTypeId,
-        enrollmentId: ticketInfo.enrollmentId,
-        TicketType: ticketType,
-        createdAt: ticketInfo.createdAt,
-        updatedAt: ticketInfo.updatedAt,
-    }
+  const ticketType = await findTickectByType(ticketInfo.ticketTypeId);
+
+  return {
+    id: ticketInfo.id,
+    status: ticketInfo.status,
+    ticketTypeId: ticketInfo.ticketTypeId,
+    enrollmentId: ticketInfo.enrollmentId,
+    TicketType: ticketType,
+    createdAt: ticketInfo.createdAt,
+    updatedAt: ticketInfo.updatedAt,
+  };
 };
 
 export const createTicket = async (ticketTypeId: number, userId: number) => {
-    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
+  const enrollment = await enrollmentRepository.findUserEnrollment(userId);
 
-    const ticket = {
-        status: TicketStatus.RESERVED,
-        TicketType: { connect: { id: ticketTypeId } },
-        Enrollment: { connect: { id: enrollment.id } },
-    };
+  if (!enrollment) throw notFoundError();
 
-    await insertTicket(ticket);
+  const ticket = {
+    status: TicketStatus.RESERVED,
+    TicketType: { connect: { id: ticketTypeId } },
+    Enrollment: { connect: { id: enrollment.id } },
+  };
 
-    const completedTicket = getTicket(userId);
-    return completedTicket;
+  await insertTicket(ticket);
+
+  const completedTicket = getTicket(userId);
+  return completedTicket;
 };

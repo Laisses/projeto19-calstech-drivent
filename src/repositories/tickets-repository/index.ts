@@ -2,27 +2,27 @@ import { prisma } from "@/config";
 import { Prisma } from "@prisma/client";
 
 export const findTickectTypes = async () => {
-    return prisma.ticketType.findMany();
+  return prisma.ticketType.findMany();
 };
 
 export const findTickectByType = async (id: number) => {
-    return prisma.ticketType.findUnique({
-        where: {
-            id
-        }
-    })
+  return prisma.ticketType.findUnique({
+    where: {
+      id
+    }
+  });
 };
 
 export const findTickects = async (enrollmentId: number) => {
-    return prisma.ticket.findFirst({
-        where: {
-            enrollmentId
-        }
-    });
+  return prisma.ticket.findFirst({
+    where: {
+      enrollmentId
+    }
+  });
 };
 
 export const insertTicket = async (data: Prisma.TicketCreateInput) => {
-    return prisma.ticket.create({
-        data
-    });
+  return prisma.ticket.create({
+    data
+  });
 };
