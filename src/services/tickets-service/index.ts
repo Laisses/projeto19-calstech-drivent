@@ -1,4 +1,4 @@
-import { findTickectTypes, findTickects } from "@/repositories/tickets-repository";
+import { findTickectTypes, findTickects, findTickectByType } from "@/repositories/tickets-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import { invalidDataError, notFoundError } from "@/errors";
 
@@ -15,11 +15,27 @@ export const getTicket = async (userId: number) => {
 
     if (!enrollment) throw notFoundError();
 
-    const enrollmentId = enrollment.id;
+    const ticketInfo = await findTickects(enrollment.id);
 
-    const tickets = await findTickects(enrollmentId);
+    if (!ticketInfo) throw notFoundError();
 
-    if (!tickets) throw notFoundError();
+    const ticketType = await findTickectByType(ticketInfo.id);
 
-    return tickets;
-}
+    return {
+        id: ticketInfo.id,
+        status: ticketInfo.status,
+        ticketTypeId: ticketInfo.ticketTypeId,
+        enrollmentId: ticketInfo.enrollmentId,
+        TicketType: {
+            id: ticketType.id,
+            name: ticketType.name,
+            price: ticketType.price,
+            isRemote: ticketType.isRemote,
+            includesHotel: ticketType.includesHotel,
+            createdAt: ticketType.createdAt,
+            updatedAt: ticketType.updatedAt,
+        },
+        createdAt: ticketInfo.createdAt,
+        updatedAt: ticketInfo.updatedAt,
+    }
+};
