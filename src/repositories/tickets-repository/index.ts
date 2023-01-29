@@ -4,8 +4,12 @@ export const findTickectTypes = async () => {
     return prisma.ticketType.findMany();
 };
 
-export const findTickects = async () => {
-    return prisma.ticket.findMany();
+export const findTickects = async (id: number) => {
+    return prisma.ticket.findUnique({
+        where: {
+            id
+        }
+    });
 };
 
 export const insertTicket = async () => {
