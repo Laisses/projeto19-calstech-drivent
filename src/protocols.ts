@@ -45,4 +45,4 @@ export type CompleteTicket = {
   updatedAt: Date,
 };
 
-export type NewTicket = Partial<CompleteTicket>;
+export type NewTicket = Omit<Partial<CompleteTicket>, "id" | "ticketTypeId" | "enrollmentId" >;
