@@ -13,6 +13,14 @@ export const findTickectByType = async (id: number) => {
   });
 };
 
+export const findTickectById = async (id: number) => {
+  return prisma.ticket.findFirst({
+    where: {
+      id
+    }
+  })
+};
+
 export const findTickects = async (enrollmentId: number) => {
   return prisma.ticket.findFirst({
     where: {
