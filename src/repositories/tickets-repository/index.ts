@@ -1,5 +1,5 @@
 import { prisma } from "@/config";
-import { Prisma } from "@prisma/client";
+import { Prisma, TicketStatus } from "@prisma/client";
 
 export const findTickectTypes = async () => {
   return prisma.ticketType.findMany();
@@ -18,7 +18,7 @@ export const findTickectById = async (id: number) => {
     where: {
       id
     }
-  })
+  });
 };
 
 export const findTickects = async (enrollmentId: number) => {
@@ -32,5 +32,14 @@ export const findTickects = async (enrollmentId: number) => {
 export const insertTicket = async (data: Prisma.TicketCreateInput) => {
   return prisma.ticket.create({
     data
+  });
+};
+
+export const updateTicketStatus = async (status: TicketStatus, id: number) => {
+  return prisma.ticket.update({
+    where: { id },
+    data: {
+      status
+    }
   });
 };

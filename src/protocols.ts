@@ -46,3 +46,14 @@ export type CompleteTicket = {
 };
 
 export type NewTicket = Omit<Partial<CompleteTicket>, "id" | "ticketTypeId" | "enrollmentId" >;
+
+export type PaymentRequest = {
+  ticketId: number,
+  cardData: {
+		issuer: string,
+    number: number,
+    name: string,
+    expirationDate: Date,
+    cvv: number
+	}
+};
