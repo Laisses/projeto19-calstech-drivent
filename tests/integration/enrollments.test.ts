@@ -215,3 +215,9 @@ describe("POST /enrollments", () => {
     });
   });
 });
+
+        expect(response.status).toBe(httpStatus.BAD_REQUEST);
+      });
+    });
+  });
+});
