@@ -27,3 +27,17 @@ export function ticketDoesNotIncludesHotel(): ApplicationError {
     message: "This ticket does not includes a hotel option",
   };
 }
+
+export function hotelNotFound(): ApplicationError {
+  return {
+    name: "HotelNotFound",
+    message: "Hotel not found",
+  };
+}
+
+export function roomsNotFound(): ApplicationError {
+  return {
+    name: "RoomsNotFound",
+    message: "No rooms were found to this hotel",
+  };
+}
