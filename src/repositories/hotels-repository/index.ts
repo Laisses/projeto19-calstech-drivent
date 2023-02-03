@@ -1,9 +1,8 @@
 import { prisma } from "@/config";
-import { Prisma } from "@prisma/client";
 
 export const selectHotels = async () => {
   return prisma.hotel.findMany();
-}
+};
 
 export const selectHotelById = async (hotelId: number) => {
   return prisma.hotel.findFirst({
@@ -18,5 +17,5 @@ export const selectRoomsByHotel = async (hotelId: number) => {
     where: {
       hotelId
     }
-  })
+  });
 };

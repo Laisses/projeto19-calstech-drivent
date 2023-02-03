@@ -4,43 +4,43 @@ import enrollmentRepository from "@/repositories/enrollment-repository";
 import { noEnrollmentFound, ticketNotFound, ticketNotPaid, ticketDoesNotIncludesHotel, hotelNotFound, roomsNotFound } from "./errors";
 
 export const findHotels = async (userId: number) => {
-    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
-    if (!enrollment) throw noEnrollmentFound();
+  const enrollment = await enrollmentRepository.findUserEnrollment(userId);
+  if (!enrollment) throw noEnrollmentFound();
 
-    const ticket = await findTickects(enrollment.id);
+  const ticket = await findTickects(enrollment.id);
 
-    if (!ticket) throw ticketNotFound();
+  if (!ticket) throw ticketNotFound();
 
-    if (ticket.status === "RESERVED") throw ticketNotPaid();
+  if (ticket.status === "RESERVED") throw ticketNotPaid();
 
-    const ticketType = await findTickectByType(ticket.ticketTypeId);
-    if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
+  const ticketType = await findTickectByType(ticket.ticketTypeId);
+  if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
 
-    const hotels = await selectHotels();
-    return hotels;
+  const hotels = await selectHotels();
+  return hotels;
 };
 
 export const findHotelRooms = async (userId: number, hotelId: number) => {
-    const enrollment = await enrollmentRepository.findUserEnrollment(userId);
-    if (!enrollment) throw noEnrollmentFound();
+  const enrollment = await enrollmentRepository.findUserEnrollment(userId);
+  if (!enrollment) throw noEnrollmentFound();
 
-    const ticket = await findTickects(enrollment.id);
-    if (!ticket) throw ticketNotFound();
+  const ticket = await findTickects(enrollment.id);
+  if (!ticket) throw ticketNotFound();
 
-    if (ticket.status !== "PAID") throw ticketNotPaid();
+  if (ticket.status !== "PAID") throw ticketNotPaid();
 
-    const ticketType = await findTickectByType(ticket.ticketTypeId);
+  const ticketType = await findTickectByType(ticket.ticketTypeId);
 
-    if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
+  if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
 
-    const hotel = await selectHotelById(hotelId);
-    if (!hotel) throw hotelNotFound();
+  const hotel = await selectHotelById(hotelId);
+  if (!hotel) throw hotelNotFound();
 
-    const hotelRooms = await selectRoomsByHotel(hotelId);
-    if (!hotelRooms) throw roomsNotFound();
+  const hotelRooms = await selectRoomsByHotel(hotelId);
+  if (!hotelRooms) throw roomsNotFound();
 
-    return {
-        ...hotel,
-        Rooms: hotelRooms,
-    };
+  return {
+    ...hotel,
+    Rooms: hotelRooms,
+  };
 };
