@@ -10,7 +10,8 @@ import {
     createRemoteTicketType,
     createInPersonTicketType,
     createTicket,
-    createHotel
+    createHotel,
+    createRoom
 } from "../factories";
 import { cleanDb, generateValidToken } from "../helpers";
 
@@ -194,6 +195,37 @@ describe("GET /hotels/:hotelId", () => {
             const response = await server.get("/hotels/0").set("Authorization", `Bearer ${token}`);
 
             expect(response.status).toEqual(httpStatus.NOT_FOUND);
+        });
+
+        it("should respond with status 200 and a list o rooms of a given hotel", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createInPersonTicketType();
+
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+
+            const hotel = await createHotel();
+            const room = await createRoom(hotel.id);
+
+            const response = await server.get(`/hotels/${hotel.id}`).set("Authorization", `Bearer ${token}`);
+
+            expect(response.status).toEqual(httpStatus.OK);
+            expect(response.body).toMatchObject({
+                id: hotel.id,
+                name: hotel.name,
+                image: hotel.image,
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+                Rooms: [{
+                    id: room.id,
+                    name: room.name,
+                    capacity: room.capacity,
+                    hotelId: hotel.id,
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String),
+                }],
+            });
         });
     });
 });
