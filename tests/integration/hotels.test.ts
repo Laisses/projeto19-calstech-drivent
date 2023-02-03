@@ -183,5 +183,17 @@ describe("GET /hotels/:hotelId", () => {
 
             expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
         });
+
+        it("should respond with status 404 if given hotel couldn't found", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createInPersonTicketType();
+
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+            const response = await server.get("/hotels/0").set("Authorization", `Bearer ${token}`);
+
+            expect(response.status).toEqual(httpStatus.NOT_FOUND);
+        });
     });
 });
