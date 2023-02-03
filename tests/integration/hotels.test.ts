@@ -1,11 +1,14 @@
 import app, { init } from "@/app";
 import faker from "@faker-js/faker";
+import { TicketStatus } from "@prisma/client";
 import httpStatus from "http-status";
 import * as jwt from "jsonwebtoken";
 import supertest from "supertest";
 import {
     createEnrollmentWithAddress,
-    createUser
+    createUser,
+    createRemoteTicketType,
+    createTicket
 } from "../factories";
 import { cleanDb, generateValidToken } from "../helpers";
 
@@ -61,5 +64,19 @@ describe("GET /hotels", () => {
 
             expect(response.status).toEqual(httpStatus.NOT_FOUND);
         });
+
+        it("should respond with status 403 if ticket doesn't include hotel", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createRemoteTicketType();
+
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+
+            const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+
+            expect(response.status).toEqual(httpStatus.FORBIDDEN);
+        });
     });
 });
+
