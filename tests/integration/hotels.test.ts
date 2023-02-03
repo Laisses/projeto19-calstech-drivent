@@ -9,7 +9,8 @@ import {
     createUser,
     createRemoteTicketType,
     createInPersonTicketType,
-    createTicket
+    createTicket,
+    createHotel
 } from "../factories";
 import { cleanDb, generateValidToken } from "../helpers";
 
@@ -90,6 +91,26 @@ describe("GET /hotels", () => {
             const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
 
             expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
+        });
+
+        it("should responde with status 200 and hotels list", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createInPersonTicketType();
+
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+            await createHotel();
+            const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+
+            expect(response.status).toEqual(httpStatus.OK);
+            expect(response.body).toEqual(expect.arrayContaining([expect.objectContaining({
+                id: expect.any(Number),
+                name: expect.any(String),
+                image: expect.any(String),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+            })]));
         });
     });
 });
