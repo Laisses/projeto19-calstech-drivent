@@ -8,12 +8,12 @@ export const findHotels = async (userId: number) => {
     if (!enrollment) throw noEnrollmentFound();
 
     const ticket = await findTickects(enrollment.id);
+
     if (!ticket) throw ticketNotFound();
 
-    if (ticket.status !== "PAID") throw ticketNotPaid();
+    if (ticket.status === "RESERVED") throw ticketNotPaid();
 
     const ticketType = await findTickectByType(ticket.ticketTypeId);
-
     if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
 
     const hotels = await selectHotels();
