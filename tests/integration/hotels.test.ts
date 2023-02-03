@@ -8,6 +8,7 @@ import {
     createEnrollmentWithAddress,
     createUser,
     createRemoteTicketType,
+    createInPersonTicketType,
     createTicket
 } from "../factories";
 import { cleanDb, generateValidToken } from "../helpers";
@@ -77,6 +78,18 @@ describe("GET /hotels", () => {
 
             expect(response.status).toEqual(httpStatus.FORBIDDEN);
         });
+
+        it("should respond with status 402 if ticket wasn't payed", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createInPersonTicketType();
+
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.RESERVED);
+
+            const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+
+            expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
+        });
     });
 });
-
