@@ -1,4 +1,4 @@
-import { findBooking } from "@/services";
+import { chooseRoom, findBooking } from "@/services";
 import { AuthenticatedRequest } from "@/middlewares";
 import httpStatus from "http-status";
 import { Response } from "express";
@@ -12,6 +12,24 @@ export const showBooking = async (req: AuthenticatedRequest, res: Response) => {
     } catch (error) {
         if (error.name === "BookingNotFound" || error.name === "RoomNotFound") {
             res.sendStatus(httpStatus.NOT_FOUND);
+        }
+    }
+};
+
+export const bookRoom = async (req: AuthenticatedRequest, res: Response) => {
+    const { userId } = req;
+    const { roomId } = req.body;
+
+    try {
+        const room = await chooseRoom(userId, roomId);
+        res.status(httpStatus.OK).send(room);
+    } catch (error) {
+        if (error.name === "BookingNotFound" || error.name === "RoomNotFound") {
+            res.sendStatus(httpStatus.NOT_FOUND);
+        }
+
+        if (error.name === "AtCapacity") {
+            res.sendStatus(httpStatus.FORBIDDEN);
         }
     }
 };

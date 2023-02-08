@@ -13,3 +13,10 @@ export function roomNotFound(): ApplicationError {
         message: "No room was found under this id"
     };
 }
+
+export function atCapacity(): ApplicationError {
+    return {
+        name: "AtCapacity",
+        message: "This room is already at full capacity"
+    };
+}
