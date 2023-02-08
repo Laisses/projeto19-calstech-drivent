@@ -1,4 +1,15 @@
-import { selectHotels, selectHotelById, selectRoomsByHotel } from "@/repositories/hotels-repository";
-import { findTickects, findTickectByType } from "@/repositories/tickets-repository";
-import enrollmentRepository from "@/repositories/enrollment-repository";
-import { noEnrollmentFound, ticketNotFound, ticketNotPaid, ticketDoesNotIncludesHotel, hotelNotFound, roomsNotFound } from "../hotels-service/errors";
+import { selectBooking, selectRoom } from "@/repositories/booking-repository";
+import { bookingNotFound, roomNotFound } from "./errors";
+
+export const findBooking = async (userId: number) => {
+    const booking = await selectBooking(userId);
+    if (!booking) throw bookingNotFound();
+
+    const room = await selectRoom(booking.roomId);
+    if (!room) throw roomNotFound();
+
+    return {
+        id: booking.id,
+        Room: room,
+    }
+};
