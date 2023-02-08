@@ -18,4 +18,5 @@ export const validateBooking = async (req: AuthenticatedRequest, res: Response, 
     if (ticketType.isRemote === false) return res.sendStatus(httpStatus.FORBIDDEN);
     if (ticketType.includesHotel === false) return res.sendStatus(httpStatus.FORBIDDEN);
 
+    next();
 };
