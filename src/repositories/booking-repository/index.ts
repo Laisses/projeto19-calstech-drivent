@@ -1,5 +1,4 @@
 import { prisma } from "@/config";
-import { Prisma } from "@prisma/client";
 
 export const selectBooking = async (userId: number) => {
     return prisma.booking.findFirst({
@@ -34,48 +33,13 @@ export const createBooking = async (userId: number, roomId: number) => {
     })
 };
 
-
-/*
-
-import { prisma } from "@/config";
-import { Prisma, TicketStatus } from "@prisma/client";
-
-export const findTickectTypes = async () => {
-  return prisma.ticketType.findMany();
-};
-
-export const findTickectByType = async (id: number) => {
-  return prisma.ticketType.findUnique({
+export const updateRoom = async (bookingId: number, roomId: number) => {
+  prisma.booking.update({
     where: {
-      id
-    }
-  });
-};
-
-export const findTickectById = async (id: number) => {
-  return prisma.ticket.findFirst({
-    where: {
-      id
-    }
-  });
-};
-
-export const findTickects = async (enrollmentId: number) => {
-  return prisma.ticket.findFirst({
-    where: {
-      enrollmentId
-    }
-  });
-};
-
-
-
-export const updateTicketStatus = async (status: TicketStatus, id: number) => {
-  return prisma.ticket.update({
-    where: { id },
+      id: bookingId,
+    },
     data: {
-      status
+      roomId,
     }
   });
 };
-*/

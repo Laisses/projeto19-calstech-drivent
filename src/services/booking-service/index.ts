@@ -1,5 +1,5 @@
-import { selectBooking, selectRoom, countRoomOccupancy, createBooking } from "@/repositories/booking-repository";
-import { bookingNotFound, roomNotFound, atCapacity } from "./errors";
+import { selectBooking, selectRoom, countRoomOccupancy, createBooking, updateRoom } from "@/repositories/booking-repository";
+import { bookingNotFound, roomNotFound, atCapacity, bookingIdAndUserDontMatch } from "./errors";
 
 const bookingValidation = async (userId: number) => {
     const booking = await selectBooking(userId);
@@ -36,4 +36,16 @@ export const chooseRoom = async (userId: number, roomId:number) => {
     const booking = await createBooking(userId, roomId);
 
     return { bookingId: booking.id };
+};
+
+export const changeRoom = async (userId: number, roomId: number, bookingId: number) => {
+    const booking = await bookingValidation(userId);
+    await roomValidation(roomId);
+    await roomOccupancyValidation(roomId);
+
+    if (booking.id !== bookingId) throw bookingIdAndUserDontMatch();
+
+    await updateRoom(bookingId, roomId);
+
+    return bookingId;
 };
