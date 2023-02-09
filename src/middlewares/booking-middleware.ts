@@ -15,7 +15,7 @@ export const validateBooking = async (req: AuthenticatedRequest, res: Response, 
     if (ticket.status === "RESERVED") return res.sendStatus(httpStatus.FORBIDDEN);
 
     const ticketType = await findTickectByType(ticket.ticketTypeId);
-    if (ticketType.isRemote === false) return res.sendStatus(httpStatus.FORBIDDEN);
+    if (ticketType.isRemote === true) return res.sendStatus(httpStatus.FORBIDDEN);
     if (ticketType.includesHotel === false) return res.sendStatus(httpStatus.FORBIDDEN);
 
     next();
