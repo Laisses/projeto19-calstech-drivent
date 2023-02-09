@@ -24,7 +24,7 @@ export const bookRoom = async (req: AuthenticatedRequest, res: Response) => {
         const room = await chooseRoom(userId, roomId);
         res.status(httpStatus.OK).send(room);
     } catch (error) {
-        if (error.name === "BookingNotFound" || error.name === "RoomNotFound") {
+        if (error.name === "RoomNotFound") {
             res.sendStatus(httpStatus.NOT_FOUND);
         }
 
