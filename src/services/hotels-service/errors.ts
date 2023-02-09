@@ -21,6 +21,13 @@ export function ticketNotPaid(): ApplicationError {
   };
 }
 
+export function ticketIsRemote(): ApplicationError {
+  return {
+    name: "TicketIsRemote",
+    message: "This ticket is remote and doesn't allow hotel",
+  };
+}
+
 export function ticketDoesNotIncludesHotel(): ApplicationError {
   return {
     name: "TicketDoesNotIncludesHotel",

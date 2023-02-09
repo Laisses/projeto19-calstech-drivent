@@ -7,8 +7,9 @@ import supertest from "supertest";
 import {
   createEnrollmentWithAddress,
   createUser,
+  createInPersonTicketWithoutHotel,
+  createInPersonTicketWithtHotel,
   createRemoteTicketType,
-  createInPersonTicketType,
   createTicket,
   createHotel,
   createRoom
@@ -72,6 +73,19 @@ describe("GET /hotels", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createInPersonTicketWithoutHotel();
+
+      await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+
+      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toEqual(httpStatus.FORBIDDEN);
+    });
+
+    it("should respond with status 403 if ticket is remote", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const userEnrollment = await createEnrollmentWithAddress(user);
       const ticketType = await createRemoteTicketType();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
@@ -85,7 +99,7 @@ describe("GET /hotels", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createInPersonTicketType();
+      const ticketType = await createInPersonTicketWithtHotel();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.RESERVED);
 
@@ -98,7 +112,7 @@ describe("GET /hotels", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createInPersonTicketType();
+      const ticketType = await createInPersonTicketWithtHotel();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
       await createHotel();
@@ -163,6 +177,19 @@ describe("GET /hotels/:hotelId", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createInPersonTicketWithoutHotel();
+
+      await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+
+      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toEqual(httpStatus.FORBIDDEN);
+    });
+
+    it("should respond with status 403 if ticket is remote", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const userEnrollment = await createEnrollmentWithAddress(user);
       const ticketType = await createRemoteTicketType();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
@@ -176,7 +203,7 @@ describe("GET /hotels/:hotelId", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createInPersonTicketType();
+      const ticketType = await createInPersonTicketWithtHotel();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.RESERVED);
 
@@ -189,7 +216,7 @@ describe("GET /hotels/:hotelId", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createInPersonTicketType();
+      const ticketType = await createInPersonTicketWithtHotel();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
       const response = await server.get("/hotels/0").set("Authorization", `Bearer ${token}`);
@@ -201,7 +228,7 @@ describe("GET /hotels/:hotelId", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const userEnrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createInPersonTicketType();
+      const ticketType = await createInPersonTicketWithtHotel();
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
 

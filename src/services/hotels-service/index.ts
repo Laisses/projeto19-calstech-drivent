@@ -1,7 +1,7 @@
 import { selectHotels, selectHotelById, selectRoomsByHotel } from "@/repositories/hotels-repository";
 import { findTickects, findTickectByType } from "@/repositories/tickets-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
-import { noEnrollmentFound, ticketNotFound, ticketNotPaid, ticketDoesNotIncludesHotel, hotelNotFound, roomsNotFound } from "./errors";
+import { noEnrollmentFound, ticketNotFound, ticketNotPaid, ticketIsRemote, ticketDoesNotIncludesHotel, hotelNotFound, roomsNotFound } from "./errors";
 
 export const findHotels = async (userId: number) => {
   const enrollment = await enrollmentRepository.findUserEnrollment(userId);
@@ -15,6 +15,7 @@ export const findHotels = async (userId: number) => {
 
   const ticketType = await findTickectByType(ticket.ticketTypeId);
   if (ticketType.includesHotel === false) throw ticketDoesNotIncludesHotel();
+  if (ticketType.isRemote === true) throw ticketIsRemote();
 
   const hotels = await selectHotels();
   return hotels;

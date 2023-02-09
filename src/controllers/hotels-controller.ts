@@ -10,7 +10,7 @@ export const showHotels = async (req: AuthenticatedRequest, res: Response) => {
     const hotels = await findHotels(userId);
     res.status(httpStatus.OK).send(hotels);
   } catch (error) {
-    if (error.name === "TicketDoesNotIncludesHotel") {
+    if (error.name === "TicketDoesNotIncludesHotel" || error.name ==="TicketIsRemote") {
       res.sendStatus(httpStatus.FORBIDDEN);
     }
     if(error.name === "TicketNotPaid") {
