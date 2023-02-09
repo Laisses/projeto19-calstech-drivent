@@ -22,7 +22,7 @@ const roomOccupancyValidation = async (roomId: number) => {
 
 export const findBooking = async (userId: number) => {
     const booking = await bookingValidation(userId);
-    const room = await roomValidation(booking.roomId);
+    const room = await selectRoom(booking.roomId);
 
     return {
         id: booking.id,
