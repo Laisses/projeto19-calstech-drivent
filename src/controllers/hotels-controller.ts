@@ -30,8 +30,11 @@ export const showHotelById = async (req: AuthenticatedRequest, res: Response) =>
     const hotelRooms = await findHotelRooms(userId, Number(hotelId));
     res.status(httpStatus.OK).send(hotelRooms);
   } catch (error) {
-    if (error.name === "TicketNotPaid" || error.name === "TicketDoesNotIncludesHotel") {
+    if (error.name === "TicketDoesNotIncludesHotel") {
       res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    if(error.name === "TicketNotPaid") {
+      res.sendStatus(httpStatus.PAYMENT_REQUIRED);
     }
     if (error.name === "TicketNotFound" || error.name === "NoEnrollmentFound" || error.name === "HotelNotFound" || error.name === "RoomsNotFound") {
       res.sendStatus(httpStatus.NOT_FOUND);
