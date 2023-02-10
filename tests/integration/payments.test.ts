@@ -8,7 +8,7 @@ import supertest from "supertest";
 import {
   createEnrollmentWithAddress,
   createUser,
-  createTicketType,
+  createRandomTicketType,
   createTicket,
   createPayment,
   generateCreditCardData,
@@ -68,11 +68,11 @@ describe("GET /payments", () => {
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
 
-    it("should respond with status 401 when user doesnt own given ticket", async () => {
+    it("should respond with status 401 when user doesn't own given ticket", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
 
       const otherUser = await createUser();
       const otherUserEnrollment = await createEnrollmentWithAddress(otherUser);
@@ -87,7 +87,7 @@ describe("GET /payments", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const payment = await createPayment(ticket.id, ticketType.price);
@@ -137,7 +137,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const body = { cardData: generateCreditCardData() };
@@ -151,7 +151,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const body = { ticketId: ticket };
@@ -177,7 +177,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
 
       const otherUser = await createUser();
       const otherUserEnrollment = await createEnrollmentWithAddress(otherUser);
@@ -194,7 +194,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const body = { ticketId: ticket.id, cardData: generateCreditCardData() };
@@ -217,7 +217,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const beforeCount = await prisma.payment.count();
@@ -235,7 +235,7 @@ describe("POST /payments/process", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createRandomTicketType();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
 
       const body = { ticketId: ticket.id, cardData: generateCreditCardData() };
