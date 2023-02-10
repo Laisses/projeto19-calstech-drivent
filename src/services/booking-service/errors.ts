@@ -20,10 +20,3 @@ export function atCapacity(): ApplicationError {
         message: "This room is already at full capacity"
     };
 }
-
-export function bookingIdAndUserDontMatch(): ApplicationError {
-    return {
-        name: "BookingIdAndUserDontMatch",
-        message: "The bookingId and user don't match"
-    };
-}

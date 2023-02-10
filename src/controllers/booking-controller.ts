@@ -50,9 +50,5 @@ export const updateBooking = async (req: AuthenticatedRequest, res: Response) =>
         if (error.name === "AtCapacity") {
             res.sendStatus(httpStatus.FORBIDDEN);
         }
-
-        if (error.name === "BookingIdAndUserDontMatch") {
-            res.sendStatus(httpStatus.FORBIDDEN);
-        }
     }
 };
