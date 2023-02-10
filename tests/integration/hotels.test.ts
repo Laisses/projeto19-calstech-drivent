@@ -158,7 +158,7 @@ describe("GET /hotels/:hotelId", () => {
     it("should respond with status 404 when user doesn't have an enrollment yet", async () => {
       const token = await generateValidToken();
 
-      const response = await server.get("/tickets").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
@@ -168,7 +168,7 @@ describe("GET /hotels/:hotelId", () => {
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
 
-      const response = await server.get("/tickets").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
@@ -181,7 +181,7 @@ describe("GET /hotels/:hotelId", () => {
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
 
-      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.FORBIDDEN);
     });
@@ -194,7 +194,7 @@ describe("GET /hotels/:hotelId", () => {
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
 
-      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.FORBIDDEN);
     });
@@ -207,7 +207,7 @@ describe("GET /hotels/:hotelId", () => {
 
       await createTicket(userEnrollment.id, ticketType.id, TicketStatus.RESERVED);
 
-      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.PAYMENT_REQUIRED);
     });
