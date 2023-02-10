@@ -45,5 +45,5 @@ export const changeRoom = async (userId: number, roomId: number, bookingId: numb
 
     await updateRoom(bookingId, roomId);
 
-    return bookingId;
+    return {bookingId: booking.id};
 };
